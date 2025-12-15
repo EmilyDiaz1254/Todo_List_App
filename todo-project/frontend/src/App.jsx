@@ -23,7 +23,6 @@ function TaskItem({ task, onToggle, onDelete, onUpdate }) {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        transition: "0.2s ease",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -60,7 +59,6 @@ function TaskItem({ task, onToggle, onDelete, onUpdate }) {
         )}
       </div>
 
-      {/* Botones */}
       <div style={{ display: "flex", gap: 8 }}>
         {editing ? (
           <>
@@ -134,9 +132,16 @@ export default function App() {
   const [text, setText] = useState("");
 
   async function loadTasks() {
-    const res = await fetch(API + "/tasks");
-    const data = await res.json();
-    setTasks(data);
+    try {
+      const res = await fetch(`${API}/trabajos`);
+      const data = await res.json();
+
+      // 🔒 Protección total contra errores
+      setTasks(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Error cargando tareas:", err);
+      setTasks([]);
+    }
   }
 
   useEffect(() => {
@@ -145,26 +150,31 @@ export default function App() {
 
   async function addTask() {
     if (!text.trim()) return;
-    await fetch(API + "/tasks", {
+
+    await fetch(`${API}/trabajos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: text.trim() }),
     });
+
     setText("");
     loadTasks();
   }
 
   async function toggleDone(task) {
-    await fetch(API + `/tasks/${task.id}`, {
+    await fetch(`${API}/trabajos/${task.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: task.title, done: task.done ? 0 : 1 }),
+      body: JSON.stringify({
+        title: task.title,
+        done: task.done ? 0 : 1,
+      }),
     });
     loadTasks();
   }
 
   async function updateTask(id, newTitle, done) {
-    await fetch(API + `/tasks/${id}`, {
+    await fetch(`${API}/trabajos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newTitle, done }),
@@ -173,7 +183,9 @@ export default function App() {
   }
 
   async function deleteTask(id) {
-    await fetch(API + `/tasks/${id}`, { method: "DELETE" });
+    await fetch(`${API}/trabajos/${id}`, {
+      method: "DELETE",
+    });
     loadTasks();
   }
 
@@ -202,7 +214,6 @@ export default function App() {
           height: "90vh",
         }}
       >
-        {/* TÍTULO MÁS PEQUEÑO */}
         <h1
           style={{
             textAlign: "center",
@@ -215,7 +226,6 @@ export default function App() {
           Todo List App
         </h1>
 
-        {/* Input */}
         <div style={{ display: "flex", gap: 10 }}>
           <input
             value={text}
@@ -228,12 +238,10 @@ export default function App() {
               border: "1px solid #ccc",
               borderRadius: 10,
               boxShadow: "0 2px 6px rgba(0,0,0,0.12)",
-              transition: "0.2s ease",
             }}
             onKeyDown={(e) => e.key === "Enter" && addTask()}
           />
 
-          {/* Botón nuevo estilo B */}
           <button
             onClick={addTask}
             style={{
@@ -244,21 +252,13 @@ export default function App() {
               borderRadius: 10,
               fontWeight: "600",
               cursor: "pointer",
-              transition: "0.2s ease",
             }}
           >
             Crear
           </button>
         </div>
 
-        {/* LISTA */}
-        <div
-          style={{
-            marginTop: 20,
-            overflowY: "auto",
-            paddingRight: 4,
-          }}
-        >
+        <div style={{ marginTop: 20, overflowY: "auto", paddingRight: 4 }}>
           {tasks.length === 0 ? (
             <p style={{ textAlign: "center", padding: 30, color: "#777" }}>
               No hay tareas por ahora
