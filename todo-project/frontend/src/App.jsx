@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:4000";
+const API = import.meta.env.VITE_API_URL || "backend-production-b652.up.railway.app";
 
 function TaskItem({ task, onToggle, onDelete, onUpdate }) {
   const [editing, setEditing] = useState(false);
