@@ -143,17 +143,36 @@ Conexión MySQL fallida: host, usuario o contraseña incorrectos. Revisa variabl
 Tabla trabajos no existe: reinicia backend, se crea automáticamente.
 
 📂 Estructura del Proyecto
-todo-project/
-├─ backend/
-│  ├─ index.js
-│  ├─ db.js
-│  └─ package.json
-├─ frontend/
-│  ├─ src/
-│  │  └─ App.jsx
-│  ├─ vite.config.js
-│  └─ package.json
-└─ README.md
+
+TODO_LIST_APP/
+└─ todo-project/
+   ├─ backend/
+   │  ├─ node_modules/
+   │  ├─ .env
+   │  ├─ db.js
+   │  ├─ package-lock.json
+   │  ├─ package.json
+   │  ├─ railway.json
+   │  └─ server.js
+   │
+   └─ frontend/
+      ├─ public/
+      ├─ src/
+      │  ├─ assets/
+      │  ├─ App.css
+      │  ├─ App.jsx
+      │  ├─ index.css
+      │  └─ main.jsx
+      ├─ .env
+      ├─ .eslintrc.json
+      ├─ .gitignore
+      ├─ eslint.config.js
+      ├─ index.html
+      ├─ package-lock.json
+      ├─ package.json
+      ├─ README.md
+      └─ vite.config.js
+
 
 📌 Notas finales
 
