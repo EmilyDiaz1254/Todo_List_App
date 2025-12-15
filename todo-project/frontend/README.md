@@ -144,6 +144,8 @@ Tabla trabajos no existe: reinicia backend, se crea automáticamente.
 
 📂 Estructura del Proyecto
 
+```bash
+
 TODO_LIST_APP/
 └─ todo-project/
    ├─ backend/
@@ -172,7 +174,7 @@ TODO_LIST_APP/
       ├─ package.json
       ├─ README.md
       └─ vite.config.js
-
+```
 
 📌 Notas finales
 
