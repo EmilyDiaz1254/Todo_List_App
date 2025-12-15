@@ -23,6 +23,7 @@ function TaskItem({ task, onToggle, onDelete, onUpdate }) {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        transition: "0.2s ease",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -132,16 +133,9 @@ export default function App() {
   const [text, setText] = useState("");
 
   async function loadTasks() {
-    try {
-      const res = await fetch(`${API}/trabajos`);
-      const data = await res.json();
-
-      // 🔒 Protección total contra errores
-      setTasks(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error("Error cargando tareas:", err);
-      setTasks([]);
-    }
+    const res = await fetch(API + "/trabajos");
+    const data = await res.json();
+    setTasks(Array.isArray(data) ? data : []);
   }
 
   useEffect(() => {
@@ -150,31 +144,26 @@ export default function App() {
 
   async function addTask() {
     if (!text.trim()) return;
-
-    await fetch(`${API}/trabajos`, {
+    await fetch(API + "/trabajos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: text.trim() }),
     });
-
     setText("");
     loadTasks();
   }
 
   async function toggleDone(task) {
-    await fetch(`${API}/trabajos/${task.id}`, {
+    await fetch(API + `/trabajos/${task.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: task.title,
-        done: task.done ? 0 : 1,
-      }),
+      body: JSON.stringify({ title: task.title, done: task.done ? 0 : 1 }),
     });
     loadTasks();
   }
 
   async function updateTask(id, newTitle, done) {
-    await fetch(`${API}/trabajos/${id}`, {
+    await fetch(API + `/trabajos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newTitle, done }),
@@ -183,9 +172,7 @@ export default function App() {
   }
 
   async function deleteTask(id) {
-    await fetch(`${API}/trabajos/${id}`, {
-      method: "DELETE",
-    });
+    await fetch(API + `/trabajos/${id}`, { method: "DELETE" });
     loadTasks();
   }
 
@@ -241,7 +228,6 @@ export default function App() {
             }}
             onKeyDown={(e) => e.key === "Enter" && addTask()}
           />
-
           <button
             onClick={addTask}
             style={{

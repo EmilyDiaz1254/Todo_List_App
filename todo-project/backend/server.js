@@ -28,6 +28,23 @@ db.query(`
 });
 
 /* ===========================
+   RUTA BASE (/)
+   DEVUELVE LAS TAREAS
+=========================== */
+app.get('/', (req, res) => {
+  db.query(
+    'SELECT * FROM trabajos ORDER BY created_at DESC',
+    (err, results) => {
+      if (err) {
+        console.error('❌ Error obteniendo trabajos:', err.message);
+        return res.status(500).json([]);
+      }
+      res.json(results || []);
+    }
+  );
+});
+
+/* ===========================
    OBTENER TODAS LAS TAREAS
 =========================== */
 app.get('/trabajos', (req, res) => {
@@ -36,7 +53,6 @@ app.get('/trabajos', (req, res) => {
     (err, results) => {
       if (err) {
         console.error('❌ Error obteniendo trabajos:', err.message);
-        // 🔒 SIEMPRE devolver array
         return res.status(500).json([]);
       }
       res.json(results || []);
@@ -108,6 +124,7 @@ app.put('/trabajos/:id', (req, res) => {
       }
 
       const current = rows[0];
+
       const newTitle =
         typeof title === 'string' && title.trim()
           ? title.trim()
@@ -168,21 +185,6 @@ app.delete('/trabajos/:id', (req, res) => {
 });
 
 /* ===========================
-   RUTA BASE
-=========================== */
-app.get('/trabajos', (req, res) => {
-  res.json({
-    message: 'API Todo List funcionando correctamente',
-    endpoints: {
-      getAll: 'GET /trabajos',
-      create: 'POST /trabajos',
-      update: 'PUT /trabajos/:id',
-      delete: 'DELETE /trabajos/:id'
-    }
-  });
-});
-
-/* ===========================
    404 CONTROLADO
 =========================== */
 app.use((req, res) => {
@@ -193,6 +195,6 @@ app.use((req, res) => {
    INICIAR SERVIDOR
 =========================== */
 app.listen(PORT, () => {
-  console.log(`✅ Backend escuchando en http://localhost:${PORT}`);
+  console.log(`✅ Backend escuchando en puerto ${PORT}`);
   console.log(`📁 Base de datos: ${process.env.DB_NAME || 'No configurada'}`);
 });
