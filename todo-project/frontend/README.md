@@ -34,13 +34,15 @@ Backend: https://backend-production-b652.up.railway.app
 Frontend: https://frontend-production-69f7.up.railway.app
 
 🛠 Tecnologías
-Parte	Tecnología
-Frontend	React, Vite, CSS inline
-Backend	Node.js, Express
-Base de datos	MySQL (Railway)
-Despliegue	Railway
+
+Frontend: React, Vite, CSS inline
+Backend: Node.js, Express
+Base de datos: MySQL (Railway)
+Despliegue: Railway
+
 🔧 Variables de Entorno
-1️⃣ Backend (backend/.env)
+Backend (backend/.env)
+
 DB_HOST=yamabiko.proxy.rlwy.net
 DB_USER=root
 DB_PASSWORD=<tu-contraseña>
@@ -48,86 +50,74 @@ DB_NAME=railway
 DB_PORT=12764
 PORT=4000
 
+El backend se conecta a MySQL de Railway usando SSL. La tabla trabajos se crea automáticamente si no existe.
 
-✅ El backend se conecta a MySQL de Railway usando SSL. La tabla trabajos se crea automáticamente si no existe.
+Frontend (frontend/.env)
 
-2️⃣ Frontend (frontend/.env)
 VITE_API_URL=https://backend-production-b652.up.railway.app
 
-
-⚠️ Muy importante:
-
-No uses localhost en producción.
-
-No agregues / al final de la URL.
+Muy importante: No uses localhost en producción y no agregues / al final de la URL del backend.
 
 🚀 Instalación
-1️⃣ Backend
+Backend
 cd backend
 npm install
 npm start       # Para desarrollo
 
-2️⃣ Frontend
+Frontend
 cd frontend
 npm install
 npm run dev     # Desarrollo
 npm run build   # Producción
 
 
-🔹 En producción, sube el build al hosting de Railway o a otro servicio de hosting estático.
+En producción, sube el build al hosting de Railway o a otro servicio de hosting estático.
 
 🌐 URLs de Despliegue
 
 Backend: https://backend-production-b652.up.railway.app
-
 Frontend: https://frontend-production-69f7.up.railway.app
 
 📝 Uso de la Aplicación
 
-Crear tarea:
+Crear tarea: escribe el título en el input y presiona Enter o clic en Crear.
 
-Escribe el título en el input
+Editar tarea: clic en Editar, modifica el texto, clic en Guardar.
 
-Presiona Enter o clic en Crear
+Marcar como completada: usa el checkbox junto a la tarea.
 
-Editar tarea:
-
-Haz clic en Editar
-
-Modifica el texto
-
-Haz clic en Guardar
-
-Marcar como completada:
-
-Usa el checkbox junto a la tarea
-
-Eliminar tarea:
-
-Haz clic en Eliminar
+Eliminar tarea: clic en Eliminar.
 
 Todas las acciones se sincronizan automáticamente con el backend y actualizan la lista.
 
 🔗 Ejemplos de fetch (Frontend)
-Obtener todas las tareas
+
+Obtener todas las tareas:
+
 const res = await fetch(`${import.meta.env.VITE_API_URL}/trabajos`);
 const data = await res.json();
 
-Crear una nueva tarea
+
+Crear una nueva tarea:
+
 await fetch(`${import.meta.env.VITE_API_URL}/trabajos`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ title: "Nueva tarea" }),
 });
 
-Actualizar tarea
+
+Actualizar tarea:
+
 await fetch(`${import.meta.env.VITE_API_URL}/trabajos/${id}`, {
   method: "PUT",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ title: "Nuevo título", done: 1 }),
 });
 
-Eliminar tarea
+
+Eliminar tarea:
+
 await fetch(`${import.meta.env.VITE_API_URL}/trabajos/${id}`, {
   method: "DELETE",
 });
@@ -140,14 +130,18 @@ No uses rutas relativas al frontend para llamar al backend.
 
 Mantén las credenciales de MySQL privadas y seguras en Railway.
 
-La tabla trabajos se crea automáticamente si no existe, no es necesario crearla manualmente.
+La tabla trabajos se crea automáticamente si no existe.
 
 🛡 Errores comunes y soluciones
-Error	Causa	Solución
-405 Method Not Allowed	URL backend mal configurada	Revisar VITE_API_URL en frontend
-Unexpected token '<'	Backend devuelve HTML (frontend llama a frontend)	Revisar URL correcta en fetch
-Conexión MySQL fallida	Host, usuario o contraseña incorrectos	Revisar variables de entorno del backend
-Tabla trabajos no existe	Conexión correcta pero tabla no creada	Reinicia backend, se crea automáticamente
+
+405 Method Not Allowed: URL backend mal configurada. Revisa VITE_API_URL.
+
+Unexpected token '<': backend devuelve HTML porque el frontend llama a frontend. Revisa URL correcta en fetch.
+
+Conexión MySQL fallida: host, usuario o contraseña incorrectos. Revisa variables de entorno del backend.
+
+Tabla trabajos no existe: reinicia backend, se crea automáticamente.
+
 📂 Estructura del Proyecto
 todo-project/
 ├─ backend/
